@@ -14,7 +14,17 @@ import {
   Zap,
   Database,
   Filter,
-  Shuffle
+  Shuffle,
+  Mail,
+  Calendar,
+  FileSpreadsheet,
+  MessageCircle,
+  Camera,
+  Globe,
+  Code,
+  Search,
+  Cloud,
+  Webhook
 } from 'lucide-react';
 
 interface AINodeData {
@@ -36,6 +46,16 @@ const nodeIcons: Record<string, React.ComponentType<any>> = {
   dataSource: Database,
   filter: Filter,
   router: Shuffle,
+  gmail: Mail,
+  googleCalendar: Calendar,
+  googleSheets: FileSpreadsheet,
+  slack: MessageCircle,
+  unsplash: Camera,
+  webScraper: Globe,
+  github: Code,
+  googleSearch: Search,
+  dropbox: Cloud,
+  webhook: Webhook,
 };
 
 const nodeColors: Record<string, string> = {
@@ -51,6 +71,16 @@ const nodeColors: Record<string, string> = {
   dataSource: 'bg-gray-500/10 border-gray-500/20 text-gray-400',
   filter: 'bg-teal-500/10 border-teal-500/20 text-teal-400',
   router: 'bg-violet-500/10 border-violet-500/20 text-violet-400',
+  gmail: 'bg-red-600/10 border-red-600/20 text-red-500',
+  googleCalendar: 'bg-blue-600/10 border-blue-600/20 text-blue-500',
+  googleSheets: 'bg-green-600/10 border-green-600/20 text-green-500',
+  slack: 'bg-purple-600/10 border-purple-600/20 text-purple-500',
+  unsplash: 'bg-gray-800/10 border-gray-800/20 text-gray-600',
+  webScraper: 'bg-orange-600/10 border-orange-600/20 text-orange-500',
+  github: 'bg-gray-900/10 border-gray-900/20 text-gray-700',
+  googleSearch: 'bg-blue-700/10 border-blue-700/20 text-blue-600',
+  dropbox: 'bg-blue-500/10 border-blue-500/20 text-blue-400',
+  webhook: 'bg-emerald-600/10 border-emerald-600/20 text-emerald-500',
 };
 
 export function AINode({ data, selected }: NodeProps<AINodeData>) {
@@ -108,6 +138,48 @@ export function AINode({ data, selected }: NodeProps<AINodeData>) {
                   <>
                     <div>From: {data.config.sourceLanguage}</div>
                     <div>To: {data.config.targetLanguage}</div>
+                  </>
+                )}
+                {data.nodeType === 'gmail' && (
+                  <>
+                    <div>To: {data.config.to || 'Not set'}</div>
+                    <div>Subject: {data.config.subject || 'Not set'}</div>
+                  </>
+                )}
+                {data.nodeType === 'slack' && (
+                  <>
+                    <div>Channel: {data.config.channel}</div>
+                    <div>User: {data.config.username}</div>
+                  </>
+                )}
+                {data.nodeType === 'googleSheets' && (
+                  <>
+                    <div>Action: {data.config.action}</div>
+                    <div>Range: {data.config.range}</div>
+                  </>
+                )}
+                {data.nodeType === 'webhook' && (
+                  <>
+                    <div>Method: {data.config.method}</div>
+                    <div>URL: {data.config.url || 'Not set'}</div>
+                  </>
+                )}
+                {data.nodeType === 'webScraper' && (
+                  <>
+                    <div>URL: {data.config.url || 'Not set'}</div>
+                    <div>Selector: {data.config.selector || 'Not set'}</div>
+                  </>
+                )}
+                {data.nodeType === 'unsplash' && (
+                  <>
+                    <div>Query: {data.config.query || 'Not set'}</div>
+                    <div>Count: {data.config.count}</div>
+                  </>
+                )}
+                {data.nodeType === 'github' && (
+                  <>
+                    <div>Action: {data.config.action}</div>
+                    <div>Repo: {data.config.repo || 'Not set'}</div>
                   </>
                 )}
               </div>

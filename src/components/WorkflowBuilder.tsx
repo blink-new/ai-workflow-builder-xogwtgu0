@@ -49,6 +49,7 @@ export function WorkflowBuilder() {
   const [selectedNode, setSelectedNode] = useState<Node | null>(null);
   const [isExecuting, setIsExecuting] = useState(false);
   const [executionLogs, setExecutionLogs] = useState<string[]>([]);
+  const [reactFlowInstance, setReactFlowInstance] = useState<any>(null);
 
   const onConnect = useCallback(
     (params: Connection) => setEdges((eds) => addEdge(params, eds)),
@@ -62,6 +63,33 @@ export function WorkflowBuilder() {
   const onPaneClick = useCallback(() => {
     setSelectedNode(null);
   }, []);
+
+  const onDragOver = useCallback((event: React.DragEvent) => {
+    event.preventDefault();
+    event.dataTransfer.dropEffect = 'move';
+  }, []);
+
+  const onDrop = useCallback(
+    (event: React.DragEvent) => {
+      event.preventDefault();
+
+      const nodeType = event.dataTransfer.getData('application/reactflow');
+
+      if (typeof nodeType === 'undefined' || !nodeType) {
+        return;
+      }
+
+      const position = reactFlowInstance?.screenToFlowPosition({
+        x: event.clientX,
+        y: event.clientY,
+      });
+
+      if (position) {
+        addNode(nodeType, position);
+      }
+    },
+    [addNode, reactFlowInstance]
+  );
 
   const addNode = useCallback((nodeType: string, position: { x: number; y: number }) => {
     const newNode: Node = {
@@ -117,6 +145,9 @@ export function WorkflowBuilder() {
             onConnect={onConnect}
             onNodeClick={onNodeClick}
             onPaneClick={onPaneClick}
+            onInit={setReactFlowInstance}
+            onDrop={onDrop}
+            onDragOver={onDragOver}
             nodeTypes={nodeTypes}
             fitView
             className="bg-background"
@@ -160,6 +191,20 @@ function getNodeLabel(nodeType: string): string {
     translation: 'Translator',
     sentiment: 'Sentiment Analysis',
     summarization: 'Summarizer',
+    trigger: 'Trigger',
+    dataSource: 'Data Source',
+    filter: 'Filter',
+    router: 'Router',
+    gmail: 'Gmail',
+    googleCalendar: 'Google Calendar',
+    googleSheets: 'Google Sheets',
+    slack: 'Slack',
+    unsplash: 'Unsplash',
+    webScraper: 'Web Scraper',
+    github: 'GitHub',
+    googleSearch: 'Google Search',
+    dropbox: 'Dropbox',
+    webhook: 'Webhook',
   };
   return labels[nodeType] || 'AI Node';
 }
@@ -200,6 +245,76 @@ function getDefaultConfig(nodeType: string): any {
     summarization: {
       maxLength: 100,
       style: 'concise'
+    },
+    trigger: {
+      triggerType: 'manual',
+      schedule: ''
+    },
+    dataSource: {
+      sourceType: 'file',
+      format: 'json'
+    },
+    filter: {
+      condition: 'contains',
+      value: ''
+    },
+    router: {
+      condition: 'if-then',
+      routes: 2
+    },
+    gmail: {
+      to: '',
+      subject: '',
+      body: '',
+      attachments: false
+    },
+    googleCalendar: {
+      action: 'create',
+      title: '',
+      startTime: '',
+      duration: 60
+    },
+    googleSheets: {
+      action: 'read',
+      spreadsheetId: '',
+      range: 'A1:Z100'
+    },
+    slack: {
+      channel: '#general',
+      message: '',
+      username: 'Workflow Bot'
+    },
+    unsplash: {
+      query: '',
+      count: 1,
+      orientation: 'landscape'
+    },
+    webScraper: {
+      url: '',
+      selector: '',
+      attribute: 'text'
+    },
+    github: {
+      action: 'create-issue',
+      repo: '',
+      title: '',
+      body: ''
+    },
+    googleSearch: {
+      query: '',
+      count: 10,
+      type: 'web'
+    },
+    dropbox: {
+      action: 'upload',
+      path: '/uploads/',
+      filename: ''
+    },
+    webhook: {
+      url: '',
+      method: 'POST',
+      headers: {},
+      body: ''
     }
   };
   return configs[nodeType] || {};

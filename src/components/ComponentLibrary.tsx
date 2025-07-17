@@ -13,7 +13,17 @@ import {
   Zap,
   Database,
   Filter,
-  Shuffle
+  Shuffle,
+  Mail,
+  Calendar,
+  FileSpreadsheet,
+  MessageCircle,
+  Camera,
+  Globe,
+  Code,
+  Search,
+  Cloud,
+  Webhook
 } from 'lucide-react';
 
 interface ComponentLibraryProps {
@@ -110,6 +120,79 @@ const utilityComponents = [
   }
 ];
 
+const externalToolComponents = [
+  {
+    id: 'gmail',
+    name: 'Gmail',
+    description: 'Send emails via Gmail API',
+    icon: Mail,
+    category: 'Communication'
+  },
+  {
+    id: 'googleCalendar',
+    name: 'Google Calendar',
+    description: 'Manage calendar events',
+    icon: Calendar,
+    category: 'Productivity'
+  },
+  {
+    id: 'googleSheets',
+    name: 'Google Sheets',
+    description: 'Read/write spreadsheet data',
+    icon: FileSpreadsheet,
+    category: 'Data'
+  },
+  {
+    id: 'slack',
+    name: 'Slack',
+    description: 'Send messages to Slack',
+    icon: MessageCircle,
+    category: 'Communication'
+  },
+  {
+    id: 'unsplash',
+    name: 'Unsplash',
+    description: 'Search and download photos',
+    icon: Camera,
+    category: 'Media'
+  },
+  {
+    id: 'webScraper',
+    name: 'Web Scraper',
+    description: 'Extract data from websites',
+    icon: Globe,
+    category: 'Data'
+  },
+  {
+    id: 'github',
+    name: 'GitHub',
+    description: 'Interact with GitHub API',
+    icon: Code,
+    category: 'Development'
+  },
+  {
+    id: 'googleSearch',
+    name: 'Google Search',
+    description: 'Search the web',
+    icon: Search,
+    category: 'Data'
+  },
+  {
+    id: 'dropbox',
+    name: 'Dropbox',
+    description: 'File storage and sharing',
+    icon: Cloud,
+    category: 'Storage'
+  },
+  {
+    id: 'webhook',
+    name: 'Webhook',
+    description: 'Send HTTP requests',
+    icon: Webhook,
+    category: 'Integration'
+  }
+];
+
 export function ComponentLibrary({ onAddNode }: ComponentLibraryProps) {
   const handleDragStart = (event: React.DragEvent, nodeType: string) => {
     event.dataTransfer.setData('application/reactflow', nodeType);
@@ -170,6 +253,15 @@ export function ComponentLibrary({ onAddNode }: ComponentLibraryProps) {
             <h3 className="text-sm font-medium text-foreground mb-3">Utilities</h3>
             <div className="space-y-2">
               {utilityComponents.map((component) => (
+                <ComponentItem key={component.id} component={component} />
+              ))}
+            </div>
+          </div>
+          
+          <div>
+            <h3 className="text-sm font-medium text-foreground mb-3">External Tools</h3>
+            <div className="space-y-2">
+              {externalToolComponents.map((component) => (
                 <ComponentItem key={component.id} component={component} />
               ))}
             </div>
